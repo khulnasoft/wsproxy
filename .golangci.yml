@@ -23,12 +23,9 @@ linters-settings:
   gocyclo:
     min-complexity: 20
   gomnd:
-    settings:
-      mnd:
-        # don't include the "operation" and "assign"
-        checks: argument,case,condition,return
+    checks: argument,case,condition,return
   govet:
-    check-shadowing: true
+    # 'check-shadowing' is deprecated, use the 'shadow' linter instead
   lll:
     line-length: 140
   maligned:
@@ -36,19 +33,15 @@ linters-settings:
   misspell:
     locale: US
   nolintlint:
-    allow-leading-space: true # don't require machine-readable nolint directives (i.e. with no leading space)
+    allow-leading-space: true # don't require machine-readable nolint directives (i.e., with no leading space)
     allow-unused: false # report any unused nolint directives
     require-explanation: false # don't require an explanation for nolint directives
     require-specific: false # don't require nolint directives to be specific about which linter is being skipped
 
 linters:
-  # please, do not use `enable-all`: it's deprecated and will be removed soon.
-  # inverted configuration with `enable-all` and `disable` is not scalable during updates of golangci-lint
   disable-all: true
   enable:
     - bodyclose
-    - deadcode
-    - depguard
     - dogsled
     - dupl
     - errcheck
@@ -74,13 +67,11 @@ linters:
     - nolintlint
     - rowserrcheck
     - staticcheck
-    - structcheck
     - stylecheck
     - typecheck
     - unconvert
     - unparam
-    - unused
-    - varcheck
+    - unused # Replaces deadcode, structcheck, varcheck
     - whitespace
 
   # don't enable:
@@ -100,12 +91,10 @@ linters:
   # - wsl
 
 issues:
-  # Excluding configuration per-path, per-linter, per-text and per-source
   exclude-rules:
     - path: _test\.go
       linters:
         - gomnd
 
-run:
-  skip-dirs:
+  exclude-dirs: # Replaces run.skip-dirs
     - test/testdata_etc
